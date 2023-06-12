@@ -1,0 +1,34 @@
+name: Build and Push Docker Images
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Generate Docker Compose file
+        run: |
+          ./generate.sh
+      
+      - name: Login to GitHub Packages
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: manas23601
+          password: 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
+
+      - name: Build and push Docker images
+        run: |
+          docker-compose -f ./docker-compose-generated.yaml build
+          docker-compose -f ./docker-compose-generated.yaml push
+
+      - name: Cleanup
+        run: |
+          docker logout docker.pkg.github.com
