@@ -40,7 +40,7 @@ jobs:
 
       - name: Build and push Docker images
         id: build-push-images
-        run: |s
+        run: |
           # Iterate over the extracted image names and build/push each image
           for image_name in ${{ steps.extract-images.outputs.image_names }}; do
             docker build -t $image_name:${{ github.sha }}
