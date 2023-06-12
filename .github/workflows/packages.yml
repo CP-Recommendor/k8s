@@ -24,9 +24,12 @@ jobs:
           username: manas23601
           password: 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
 
-      - name: Build and push Docker images
+      - name: Build Docker images
         run: |
           docker-compose -f ./docker-compose-generated.yaml build
+
+      - name: Push Docker Images
+        run: |
           docker-compose -f ./docker-compose-generated.yaml push
 
       - name: Cleanup
