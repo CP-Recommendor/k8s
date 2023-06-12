@@ -40,7 +40,7 @@ jobs:
           ./generate.sh
 
       - name: Build Compose Images
-        run: docker compose -f compose.yaml build
-  
+        run: docker compose -f ./docker-compose-generated.yaml build
+        
       - name: Push image to Container Registry
-        run: docker compose -f compose.yaml push
+        run: docker compose -f ./docker-compose-generated.yaml push
