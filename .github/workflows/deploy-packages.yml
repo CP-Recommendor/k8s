@@ -44,7 +44,7 @@ jobs:
           # Iterate over the extracted image names and build/push each image
           for image_name in ${{ steps.extract-images.outputs.image_names }}; do
             docker build -t $image_name:${{ github.sha }} \
-            --label "org.opencontainers.image.source=${image_name} \
+            --label "org.opencontainers.image.source=${image_name}" \
             --label "org.opencontainers.image.description=My container image" \
             --label "org.opencontainers.image.licenses=MIT"
             docker push $image_name:${{ github.sha }}
