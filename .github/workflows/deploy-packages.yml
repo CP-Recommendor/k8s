@@ -39,14 +39,8 @@ jobs:
         run: |
           ./generate.sh
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: publish
-        uses: pennsignals/publish_docker-compose@v0.1.0
-        with:
-          docker_compose: 'docker-compose-generated.yaml' # required
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Build Compose Images
+        run: docker compose -f compose.yaml build
+  
+      - name: Push image to Container Registry
+        run: docker compose -f compose.yaml push
