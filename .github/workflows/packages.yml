@@ -30,8 +30,8 @@ jobs:
 
       - name: Push Docker Images
         run: |
-          docker-compose run ghcr.io/dees/hello-docker-gcr-demo:latest
-          docker push ghcr.io/dees/hello-docker-gcr-demo:latest
+          docker-compose -f ./docker-compose-generated.yaml run ghcr.io/dees/hello-docker-gcr-demo:latest
+          docker-compose -f ./docker-compose-generated.yaml push ghcr.io/dees/hello-docker-gcr-demo:latest
 
       - name: Cleanup
         run: |
