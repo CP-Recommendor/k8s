@@ -26,11 +26,12 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker-compose -f ./docker-compose-generated.yaml build
+          docker-compose -f ./docker-compose-generated.yaml build --tag ghcr.io/dees/hello-docker-gcr-demo:latest
 
       - name: Push Docker Images
         run: |
-          docker-compose -f ./docker-compose-generated.yaml push
+          docker-compose run ghcr.io/dees/hello-docker-gcr-demo:latest
+          docker push ghcr.io/dees/hello-docker-gcr-demo:latest
 
       - name: Cleanup
         run: |
