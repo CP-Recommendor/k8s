@@ -41,8 +41,15 @@ jobs:
       - name: Build and push Docker images
         id: build-push-images
         run: |
-          # Iterate over the extracted image names and build/push each image
-          for image_name in ${{ steps.extract-images.outputs.image_names }}; do
-            docker build -t $image_name:${{ github.sha }} --label "org.opencontainers.image.source=${image_name}"
-            docker push $image_name:${{ github.sha }}
+          # Split the extracted image names into an array
+          IFS=$'\n' read -rd '' -a image_names_array <<< "${{ steps.extract-images.outputs.image_names }}"
+
+          # Iterate over the array of image names
+          for image_name in "${image_names_array[@]}"; do
+            # Add desired tags and labels to the image
+            tag="${image_name}:${{ github.sha }}"
+            label="org.example.label=${image_name}"
+
+            docker build -t $tag --label $label .
+            docker push $tag
           done
