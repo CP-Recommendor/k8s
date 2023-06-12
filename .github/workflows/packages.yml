@@ -1,37 +1,41 @@
-name: Build and Push Docker Images
+name: Create and publish a Docker image
+
 on:
   push:
-    branches:
-      - main
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+    branches: ['release']
 
-      - name: Generate Docker Compose file
-        run: |
-          ./generate.sh
-      
-      - name: Login to GitHub Packages
-        uses: docker/login-action@v1
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: manas23601
           password: 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
 
-      - name: Build Docker images
-        run: |
-          docker-compose build
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Push Docker Images
-        run: |
-          docker-compose push
-
-      - name: Cleanup
-        run: |
-          docker logout docker.pkg.github.com
+      - name: Build and push Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
