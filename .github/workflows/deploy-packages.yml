@@ -1,15 +1,24 @@
-name: Create and publish Docker images
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
+
+name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['main']
+    branches: ['release']
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-images:
+  build-and-push-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,23 +35,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate docker-compose-generated.yaml
-        run: |
-          ./generate.sh
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Extract image names from docker-compose-generated.yaml
-        id: extract-images
-        run: |
-          image_names=$(jq -r '.models[].serviceName' config.json)
-
-          # Set the output variable with the extracted image names
-          echo "::set-output name=image_names::${image_names}"
-
-      - name: Build and push Docker images
-        id: build-push-images
-        run: |
-          # Iterate over the extracted image names and build/push each image
-          for image_name in ${{ steps.extract-images.outputs.image_names }}; do
-            docker build -t $image_name:${{ github.sha }}
-            docker push $image_name:${{ github.sha }}
-          done
+      - name: publish
+        uses: pennsignals/publish_docker-compose@v0.1.0
+        with:
+          docker_compose: 'docker-compose.build.yml' # required
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
