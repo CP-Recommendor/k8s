@@ -43,4 +43,4 @@ jobs:
         run: docker compose -f ./docker-compose-generated.yaml build
         
       - name: Push image to Container Registry
-        run: docker compose -f ./docker-compose-generated.yaml push
+        run: docker compose -f ./docker-compose-generated.yaml push "${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}"
