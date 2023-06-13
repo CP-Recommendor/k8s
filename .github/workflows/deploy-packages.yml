@@ -38,8 +38,8 @@ jobs:
           IFS=$'\n' read -ra image_names_array <<< "$image_names"
           IFS=$'\n' read -ra paths_array <<< "$paths"
           for index in "${!image_names_array[@]}"; do
-            image="${image_names[$index]}"
-            path="${paths[$index]}"
+            image="${image_names_array[index]}"
+            path="${paths_array[index]}"
             
             docker build  "./$path" -t "ghcr.io/manas23601/$image:latest"
             docker push "ghcr.io/manas23601/$image:latest"
