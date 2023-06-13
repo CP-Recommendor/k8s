@@ -30,11 +30,10 @@ jobs:
       - name: Generate docker-compose-generated.yaml
         run: |
           ./generate.sh
-          image_names=$(jq -r '.models[].serviceName' config.json)
-          paths=$(jq -r '.models[].modelBasePath' config.json)
-
       - name: Build the hello-docker Docker image
         run: |
+          image_names=$(jq -r '.models[].serviceName' ./config.json)
+          paths=$(jq -r '.models[].modelBasePath' ./config.json)
           IFS=$'\n' read -ra image_names_array <<< "$image_names"
           IFS=$'\n' read -ra paths_array <<< "$paths"
           for index in "${!image_names_array[@]}"; do
