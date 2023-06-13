@@ -31,14 +31,15 @@ jobs:
         run: |
           ./generate.sh
           image_names=$(jq -r '.models[].serviceName' config.json)
-          paths = $(jq -r '.models[].modelBasePath' config.json)
+          paths=$(jq -r '.models[].modelBasePath' config.json)
 
       - name: Build the hello-docker Docker image
         run: |
+          lowercase_username=$(echo "${{ steps.login.outputs.username }}" | tr '[:upper:]' '[:lower:]')
           for index in "${!image_names[@]}"; do
             image="${image_names[$index]}"
             path="${paths[$index]}"
             
-            docker build -t "ghcr.io/${{ steps.login.outputs.username }}/$image:latest" "$path"
-            docker push "ghcr.io/${{ steps.login.outputs.username }}/$image:latest"
+            docker build -t "ghcr.io/$lowercase_username/$image:latest" "$path"
+            docker push "ghcr.io/$lowercase_username/$image:latest"
           done
