@@ -36,6 +36,8 @@ jobs:
       - name: Build the hello-docker Docker image
         run: |
           lowercase_username=$(echo "${{ steps.login.outputs.username }}" | tr '[:upper:]' '[:lower:]')
+          IFS=$'\n' read -rd '' -a image_names_array <<< "$image_names"
+          IFS=$'\n' read -rd '' -a paths_array <<< "$paths"
           for index in "${!image_names[@]}"; do
             echo $index
             image="${image_names[$index]}"
