@@ -35,14 +35,12 @@ jobs:
 
       - name: Build the hello-docker Docker image
         run: |
-          lowercase_username=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
           IFS=$'\n' read -rd '' -a image_names_array <<< "$image_names"
           IFS=$'\n' read -rd '' -a paths_array <<< "$paths"
-          for index in "${!image_names_array[@]}"; do
-            echo $index
+          for image_name in $image_names; do
             image="${image_names[$index]}"
             path="${paths[$index]}"
             
-            docker build  "./$path" -t "ghcr.io/$lowercase_username/$image:latest"
-            docker push "ghcr.io/$lowercase_username/$image:latest"
+            docker build  "./$path" -t "ghcr.io/${{ github.actor }}/$image:latest"
+            docker push "ghcr.io/${{ github.actor }}/$image:latest"
           done
