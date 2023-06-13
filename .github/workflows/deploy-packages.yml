@@ -36,7 +36,7 @@ jobs:
           paths=$(jq -r '.models[].modelBasePath' ./config.json)
           readarray -t image_array <<< "$image_names"
           readarray -t paths_array <<< "$path"
-          lowercase_actor=$(echo "${{ github_actor }}" | tr '[:upper:]' '[:lower:]')
+          lowercase_actor=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
