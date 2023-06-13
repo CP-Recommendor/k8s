@@ -13,7 +13,7 @@ async def startup():
     app.client = aiohttp.ClientSession()
 
 @app.route('/', methods=['POST'])
-async def translate():
+async def embed():
     data = await request.get_json()
     req = ModelRequest(**data)
     model = Model(app)
