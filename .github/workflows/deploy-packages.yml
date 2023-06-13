@@ -35,8 +35,8 @@ jobs:
 
       - name: Build the hello-docker Docker image
         run: |
-          IFS=$'\n' read -rd '' -a image_names_array <<< "$image_names"
-          IFS=$'\n' read -rd '' -a paths_array <<< "$paths"
+          IFS=$'\n' read -ra image_names_array <<< "$image_names"
+          IFS=$'\n' read -ra paths_array <<< "$paths"
           for image_name in $image_names; do
             image="${image_names[$index]}"
             path="${paths[$index]}"
