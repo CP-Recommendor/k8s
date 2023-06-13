@@ -40,6 +40,6 @@ jobs:
             image="${image_names[$index]}"
             path="${paths[$index]}"
             
-            docker build -t "ghcr.io/$lowercase_username/$image:latest" "$path"
+            docker build  "./$path" -t "ghcr.io/$lowercase_username/$image:latest"
             docker push "ghcr.io/$lowercase_username/$image:latest"
           done
