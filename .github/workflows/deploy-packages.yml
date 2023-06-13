@@ -37,7 +37,7 @@ jobs:
         run: |
           IFS=$'\n' read -ra image_names_array <<< "$image_names"
           IFS=$'\n' read -ra paths_array <<< "$paths"
-          for image_name in $image_names; do
+          for index in "${!image_names_array[@]}"; do
             image="${image_names[$index]}"
             path="${paths[$index]}"
             
