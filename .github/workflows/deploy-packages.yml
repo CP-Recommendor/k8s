@@ -40,6 +40,6 @@ jobs:
             image="${image_names_array[index]}"
             path="${paths_array[index]}"
             
-            docker build  "./$path" -t "ghcr.io/manas23601/$image:latest"
-            docker push "ghcr.io/manas23601/$image:latest"
+            docker build  "./$path" -t "ghcr.io/k8playground/$image:latest"
+            docker push "ghcr.io/k8playground/$image:latest"
           done
