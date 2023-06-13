@@ -34,10 +34,8 @@ jobs:
         run: |
           image_names=$(jq -r '.models[].serviceName' ./config.json)
           paths=$(jq -r '.models[].modelBasePath' ./config.json)
-          image_names=$(echo "$image_names" | tr '\n' ' ')
-          paths=$(echo "$paths" | tr '\n' ' ')
-          IFS=$'\n' read -ra image_names_array <<< "$image_names"
-          IFS=$'\n' read -ra paths_array <<< "$paths"
+          readarray -t image_array <<< "$image_names"
+          readarray -t paths_array <<< "$path"
           for index in "${!image_names_array[@]}"; do
             image="${image_names_array[index]}"
             path="${paths_array[index]}"
