@@ -1,0 +1,12 @@
+version: '3'
+services:
+  text_translation_bhashini:
+    build:
+      context: src/text_translation/bhashini/remote/.
+    ports:
+      - 8000:8000
+  text_lang_detection_bhashini:
+    build:
+      context: src/text_lang_detection/bhashini/remote/.
+    ports:
+      - 8001:8000
