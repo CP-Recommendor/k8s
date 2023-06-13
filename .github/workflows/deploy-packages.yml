@@ -42,5 +42,5 @@ jobs:
             path="${paths_array[index]}"
             
             docker build  "./$path" -t "ghcr.io/$lowercase_actor/$image:latest"
-            docker push "ghcr.io/manas23601/$lowercase_actor:latest"
+            docker push "ghcr.io/$lowercase_actor/$image:latest"
           done

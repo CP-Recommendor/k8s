@@ -15,9 +15,9 @@
       "environment": {}
     },
     {
-      "serviceName": "text_lang_detection_bhashini",
-      "modelBasePath": "src/text_lang_detection/bhashini/remote/.",
-      "apiBasePath": "/text_lang_detection/bhashini/remote",
+      "serviceName": "text_translation_google",
+      "modelBasePath": "src/text_translation/google/remote/.",
+      "apiBasePath": "/text_translation/google/remote",
       "containerPort": 8000,
       "environment": {}
     }
