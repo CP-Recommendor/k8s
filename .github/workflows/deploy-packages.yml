@@ -41,6 +41,6 @@ jobs:
             image="${image_names[$index]}"
             path="${paths[$index]}"
             
-            docker build  "./$path" -t "ghcr.io/${{ github.actor }}/$image:latest"
-            docker push "ghcr.io/${{ github.actor }}/$image:latest"
+            docker build  "./$path" -t "ghcr.io/manas23601/$image:latest"
+            docker push "ghcr.io/manas23601/$image:latest"
           done
