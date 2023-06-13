@@ -36,10 +36,11 @@ jobs:
           paths=$(jq -r '.models[].modelBasePath' ./config.json)
           readarray -t image_array <<< "$image_names"
           readarray -t paths_array <<< "$path"
+          lowercase_actor=$(echo "${{ github_actor }}" | tr '[:upper:]' '[:lower:]')
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            docker build  "./$path" -t "ghcr.io/${{ github.actor }}/$image:latest"
-            docker push "ghcr.io/manas23601/${{ github.actor }}:latest"
+            docker build  "./$path" -t "ghcr.io/$lowercase_actor/$image:latest"
+            docker push "ghcr.io/manas23601/$lowercase_actor:latest"
           done
