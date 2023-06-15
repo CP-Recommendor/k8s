@@ -52,15 +52,13 @@ jobs:
           if [ "${{ github.event_name }}" = "push" ]; then
             previous_commit=$second_last_commit
           fi
-
+          
+          echo $previous_commit
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            if [ -z "$previous_commit" ]; then
-              echo "No previous commit. Building ${image} for branch '${branch}'..."
-              echo "::set-output name=changed::$true"
-            elif git diff --quiet "$previous_commit..HEAD" -- "./$path"; then
+            if git diff --quiet "$previous_commit..HEAD" -- "./$path"; then
               echo "No changes in ${image} for branch '${branch}'"
               echo "::set-output name=changed::$false"
             else
