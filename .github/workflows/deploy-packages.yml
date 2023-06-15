@@ -55,6 +55,7 @@ jobs:
           
           echo $previous_commit
           current_commit=$(git rev-parse HEAD)
+          echo $current_commit
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
