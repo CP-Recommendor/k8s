@@ -40,7 +40,7 @@ jobs:
           
           echo "::set-output name=branch::${{ github.ref }}"
           branch=${branch#refs/heads/} # Remove the 'refs/heads/' prefix
-
+          echo $branch
           previous_commit=$(git rev-parse "${branch}")
 
           for index in "${!image_array[@]}"; do
