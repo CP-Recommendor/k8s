@@ -42,7 +42,7 @@ jobs:
           branch=${{ steps.branch-name.outputs.branch }}
           branch=${branch#refs/heads/} # Remove the 'refs/heads/' prefix
 
-          previous_commit=$(git rev-parse "${branch}@{1}" 2>/dev/null || echo "")
+          previous_commit=$(git rev-parse "${branch}")
 
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
