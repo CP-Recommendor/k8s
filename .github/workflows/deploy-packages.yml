@@ -41,7 +41,12 @@ jobs:
           branch="${{ github.ref }}"
           branch=${branch#refs/heads/} # Remove the 'refs/heads/' prefix
           echo $branch
-          previous_commit=$(git rev-parse "${branch}")
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            previous_commit=$(git rev-parse "${branch}")
+          fi
+          if [ "${{ github.event_name }}" = "push" ]; then
+            previous_commit=$(git rev-parse "${branch}@{1}")
+          fi
 
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
