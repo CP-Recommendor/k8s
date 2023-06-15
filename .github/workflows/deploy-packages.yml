@@ -16,10 +16,6 @@ jobs:
       packages: write
 
     steps:
-
-      - name: Current Branch
-        run: |
-          git status
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -36,21 +32,30 @@ jobs:
           ./generate.sh
       - name: Build the hello-docker Docker image
         run: |
+
           image_names=$(jq -r '.models[].serviceName' ./config.json)
           paths=$(jq -r '.models[].modelBasePath' ./config.json)
           readarray -t image_array <<< "$image_names"
           readarray -t paths_array <<< "$paths"
-          echo "::set-output name=previous_commit::$(git rev-parse HEAD^1)"
+          
+          echo "::set-output name=branch::${{ github.ref }}"
+          branch=${{ steps.branch-name.outputs.branch }}
+          branch=${branch#refs/heads/} # Remove the 'refs/heads/' prefix
 
-          lowercase_actor=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
+          previous_commit=$(git rev-parse "${branch}@{1}" 2>/dev/null || echo "")
+
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            if git diff --quiet $previous_commit..HEAD -- ./${paths_array[index]::-1}; then
-              echo "No Changes in ${image}"
+            if [ -z "$previous_commit" ]; then
+              echo "No previous commit. Building ${image} for branch '${branch}'..."
+              echo "::set-output name=changed::$true"
+            elif git diff --quiet "$previous_commit..HEAD" -- "./$path"; then
+              echo "No changes in ${image} for branch '${branch}'"
+              echo "::set-output name=changed::$false"
             else
-              docker build  "./$path" -t "ghcr.io/$lowercase_actor/$image:latest"
-              docker push "ghcr.io/$lowercase_actor/$image:latest"
+              echo "Changes detected in ${image} for branch '${branch}'"
+              echo "::set-output name=changed::$true"
             fi
           done
