@@ -39,10 +39,9 @@ jobs:
           readarray -t paths_array <<< "$paths"
           
           echo "::set-output name=branch::${{ github.ref }}"
-          branch=${{ steps.branch-name.outputs.branch }}
           branch=${branch#refs/heads/} # Remove the 'refs/heads/' prefix
 
-          previous_commit=$(git rev-parse "${branch}")
+          previous_commit=$(git rev-parse "${branch}@}")
 
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
