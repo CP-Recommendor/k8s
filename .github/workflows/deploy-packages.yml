@@ -53,6 +53,7 @@ jobs:
             previous_commit=$second_last_commit
           fi
           
+          git diff 4a40c16cfde5a9db7f46be96e7daf169d0efcc81 HEAD 
           echo $previous_commit
           current_commit=$(git rev-parse HEAD)
           echo $current_commit
