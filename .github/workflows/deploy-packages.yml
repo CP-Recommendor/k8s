@@ -54,11 +54,12 @@ jobs:
           fi
           
           echo $previous_commit
+          current_commit=$(git rev-parse HEAD)
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            if git diff --quiet $previous_commit...HEAD -- "./$path"; then
+            if git diff --quiet $previous_commit $current_commit -- "./$path"; then
               echo "No changes in ${image} for branch '${branch}'"
               echo "::set-output name=changed::$false"
             else
