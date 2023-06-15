@@ -40,6 +40,7 @@ jobs:
           
           branch="${{ github.ref }}"
           branch=${branch#refs/heads/} # Remove the 'refs/heads/' prefix
+          git fetch origin $branch
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             previous_commit=$(git rev-parse "origin/${branch}")
           fi
