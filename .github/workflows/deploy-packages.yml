@@ -39,7 +39,7 @@ jobs:
           readarray -t paths_array <<< "$paths"
           
           commit_history=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/commits?sha=${branch}&per_page=100")
+          "https://api.github.com/repos/${{ github.repository }}/commits?sha=${main}&per_page=100")
 
           echo $commit_history
           branch="${{ github.ref }}"
