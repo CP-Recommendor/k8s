@@ -41,7 +41,7 @@ jobs:
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            if git diff --quiet HEAD^..HEAD -- ${paths_array[index]::-1}; then
+            if git diff --quiet HEAD^..HEAD -- ./${paths_array[index]::-1}; then
               echo "No Changes in ${image}"
             else
               docker build  "./$path" -t "ghcr.io/$lowercase_actor/$image:latest"
