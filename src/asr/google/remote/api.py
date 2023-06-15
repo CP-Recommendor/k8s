@@ -20,4 +20,4 @@ async def translate():
     return await model.inference(req)
 
 
-yes
+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
