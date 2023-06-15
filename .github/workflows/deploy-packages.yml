@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - name: Log in to the Container registry
         id: login
@@ -38,30 +40,11 @@ jobs:
           readarray -t image_array <<< "$image_names"
           readarray -t paths_array <<< "$paths"
           
-          branch="${{ github.ref }}"
-          branch=${branch#refs/heads/} # Remove the 'refs/heads/' prefix
-          commit_history=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/commits?sha=${main}&per_page=2")
-          
-          last_commit=$(echo "$commit_history" | jq -r '.[0].sha')
-          second_last_commit=$(echo "$commit_history" | jq -r '.[1].sha')
-
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            previous_commit=$last_commit
-          fi
-          if [ "${{ github.event_name }}" = "push" ]; then
-            previous_commit=$second_last_commit
-          fi
-          
-          git diff 4a40c16cfde5a9db7f46be96e7daf169d0efcc81 HEAD 
-          echo $previous_commit
-          current_commit=$(git rev-parse HEAD)
-          echo $current_commit
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            if git diff --quiet $previous_commit $current_commit -- "./$path"; then
+            if git diff --quiet HEAD^..HEAD -- "./$path"; then
               echo "No changes in ${image} for branch '${branch}'"
               echo "::set-output name=changed::$false"
             else
