@@ -16,6 +16,10 @@ jobs:
       packages: write
 
     steps:
+
+      - name: Current Branch
+        run: |
+          git status
       - name: Checkout repository
         uses: actions/checkout@v3
 
