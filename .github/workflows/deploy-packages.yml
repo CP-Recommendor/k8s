@@ -36,12 +36,14 @@ jobs:
           paths=$(jq -r '.models[].modelBasePath' ./config.json)
           readarray -t image_array <<< "$image_names"
           readarray -t paths_array <<< "$paths"
+          echo "::set-output name=previous_commit::$(git rev-parse HEAD^1)"
+
           lowercase_actor=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            if git diff --quiet HEAD^..HEAD -- ./${paths_array[index]::-1}; then
+            if git diff --quiet $previous_commit..HEAD -- ./${paths_array[index]::-1}; then
               echo "No Changes in ${image}"
             else
               docker build  "./$path" -t "ghcr.io/$lowercase_actor/$image:latest"
