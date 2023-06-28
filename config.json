@@ -22,6 +22,13 @@
       "apiBasePath": "/text_translation/bhashini/remote",
       "containerPort": 8000,
       "environment": {}
+    },
+    {
+      "serviceName": "text_lang_detection_bhashini",
+      "modelBasePath": "src/text_lang_detection/bhashini/remote/.",
+      "apiBasePath": "/text_lang_detection/bhashini/remote",
+      "containerPort": 8000,
+      "environment": {}
     }
   ]
 }
