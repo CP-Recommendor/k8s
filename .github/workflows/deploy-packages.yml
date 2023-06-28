@@ -40,7 +40,7 @@ jobs:
           readarray -t image_array <<< "$image_names"
           readarray -t paths_array <<< "$paths"
           
-          lowercase_actor=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
+          lowercase_actor=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
