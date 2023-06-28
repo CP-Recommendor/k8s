@@ -15,6 +15,13 @@
       "apiBasePath": "/conversation_terminator/remote",
       "containerPort": 8000,
       "environment": {}
+    },
+    {
+      "serviceName": "text_translation_bhashini",
+      "modelBasePath": "src/text_translation/bhashini/remote/.",
+      "apiBasePath": "/text_translation/bhashini/remote",
+      "containerPort": 8000,
+      "environment": {}
     }
   ]
 }
