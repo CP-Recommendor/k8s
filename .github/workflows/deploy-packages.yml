@@ -40,15 +40,11 @@ jobs:
           readarray -t image_array <<< "$image_names"
           readarray -t paths_array <<< "$paths"
           
+          lowercase_actor=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
           for index in "${!image_array[@]}"; do
             image="${image_array[index]}"
             path="${paths_array[index]}"
             
-            if git diff --quiet HEAD^..HEAD -- "./$path"; then
-              echo "No changes in ${image} for branch '${branch}'"
-              echo "::set-output name=changed::$false"
-            else
-              echo "Changes detected in ${image} for branch '${branch}'"
-              echo "::set-output name=changed::$true"
-            fi
+            docker build  "./$path" -t "${{ env.REGISTRY }}/$lowercase_actor/$image:latest"
+            docker push "${{ env.REGISTRY }}/$lowercase_actor/$image:latest"
           done

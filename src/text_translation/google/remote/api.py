@@ -18,6 +18,3 @@ async def translate():
     req = ModelRequest(**data)
     model = Model(app)
     return await model.inference(req)
-
-
-agakn
